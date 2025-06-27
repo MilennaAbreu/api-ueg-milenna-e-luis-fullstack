@@ -1,0 +1,13 @@
+<mat-card>
+  <mat-card-title>{{isEdit?'Editar Filme':'Novo Filme'}}</mat-card-title>
+  <mat-form-field appearance="fill" class="full-width"><mat-label>Título</mat-label><input matInput [(ngModel)]="film.title"></mat-form-field>
+  <mat-form-field appearance="fill" class="full-width"><mat-label>Diretor</mat-label><input matInput [(ngModel)]="film.director"></mat-form-field>
+  <mat-form-field appearance="fill" class="full-width"><mat-label>Data de Lançamento</mat-label><input matInput type="date" [(ngModel)]="film.releaseDate"></mat-form-field>
+  <mat-form-field appearance="fill" class="full-width"><mat-label>Gênero</mat-label><input matInput [(ngModel)]="film.genre"></mat-form-field>
+  <mat-form-field appearance="fill" class="full-width"><mat-label>Língua</mat-label><input matInput [(ngModel)]="film.language"></mat-form-field>
+  <mat-checkbox [(ngModel)]="film.watched">Assistido?</mat-checkbox>
+  <div class="actions">
+    <button mat-raised-button color="primary" (click)="save()">Salvar</button>
+    <button mat-button routerLink="/list">Cancelar</button>
+  </div>
+</mat-card>
