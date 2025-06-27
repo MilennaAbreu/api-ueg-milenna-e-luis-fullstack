@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FilmsService {
-  private readonly baseUrl = '/movies';
+  private baseUrl = '/api/movies';
 
   constructor(private http: HttpClient) {}
 
@@ -14,18 +14,18 @@ export class FilmsService {
   }
 
   getFilm(id: number): Observable<Film> {
-    return this.http.get<Film>(`${this.baseUrl}/${id}`);
+    return this.http.get<Film>(`\${this.baseUrl}/\${id}`);
   }
 
-  addFilm(film: Film): Observable<any> {
-    return this.http.post(this.baseUrl, film);
+  addFilm(film: Film): Observable<void> {
+    return this.http.post<void>(this.baseUrl, film);
   }
 
-  updateFilm(film: Film): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${film.id}`, film);
+  updateFilm(film: Film): Observable<void> {
+    return this.http.put<void>(`\${this.baseUrl}/\${film.id}`, film);
   }
 
-  removeFilm(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+  removeFilm(id: number): Observable<void> {
+    return this.http.delete<void>(`\${this.baseUrl}/\${id}`);
   }
 }

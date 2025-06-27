@@ -1,63 +1,92 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatButtonModule } from '@angular/material/button';
-import { Film } from '../shared/film';
-import { FilmsService } from '../shared/films.service';
+import { Component } from '@angular/core';
+import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {MatButton} from '@angular/material/button';
+import {FilmsService} from '../shared/films.service';
+import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {Film} from '../shared/film';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+
 
 @Component({
   selector: 'app-film-form',
-  standalone: true,
   imports: [
-    CommonModule,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatCardActions,
+    MatButton,
+    MatFormField,
+    RouterLink,
+    MatLabel,
+    MatInput,
     FormsModule,
-    RouterModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatButtonModule
+    MatCheckbox
   ],
   templateUrl: './film-form.component.html',
-  styleUrls: ['./film-form.component.css']
+  styleUrl: './film-form.component.scss'
 })
-export class FilmFormComponent implements OnInit {
-  film: Film = {
-    id: 0,
-    title: '',
-    director: '',
-    releaseDate: '',
-    genre: '',
-    language: '',
-    watched: false
-  };
-  isEdit = false;
+export class FilmFormComponent {
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private filmsService: FilmsService
-  ) {}
+  film!: Film;
 
-  ngOnInit(): void {
-    const idParam = this.route.snapshot.params['id'];
-    if (idParam) {
-      this.isEdit = true;
-      this.filmsService.getFilm(+idParam)
-        .subscribe(f => this.film = f);
+  constructor(private filmService: FilmsService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,) {
+    this.initFilm();
+    this.loadFilm();
+  }
+
+  initFilm(){
+    this.film = {
+      title: '',
+      director: '',
+      releaseDate: '',
+      genre: '',
+      available: true,
+      language: '',
+      watched: false
+    };
+  }
+
+
+  validate(filmValue: Film) {
+    if (!filmValue.title) {
+      alert('E impossivel que um filme nao possua um nome')
+      return false;
+    }
+    return true;
+  }
+
+
+  saveFilm() {
+    if (!this.validate(this.film)) { return; }
+
+    if (this.film.id) {
+      this.filmService.updateFilm(this.film).subscribe(() => this.navigateToList());
+    } else {
+      this.filmService.addFilm(this.film).subscribe(() => {
+        this.initFilm();
+        this.navigateToList();
+      });
     }
   }
 
-  save(): void {
-    const req$ = this.isEdit
-      ? this.filmsService.updateFilm(this.film)
-      : this.filmsService.addFilm(this.film);
+  refreshField(nomeFilme: string) {
+    this.film.title = nomeFilme;
+  }
 
-    req$.subscribe(() => this.router.navigate(['/list']));
+  private loadFilm() {
+    const edit = this.activatedRoute.snapshot.paramMap.get('id')
+    if (edit) {
+      this.filmService.getFilm(parseInt(edit)).subscribe(film => this.film = film);
+    }
+
+  }
+
+  navigateToList() {
+    this.router.navigate(['/list'])
   }
 }

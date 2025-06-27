@@ -1,1 +1,14 @@
-.full-width { width: 100%; margin-bottom: 16px; } .actions { display: flex; gap: 8px; margin-top: 16px; }
+.container {
+  padding: 16px;
+}
+.full-width {
+  width: 100%;
+}
+mat-card {
+  margin: 16px;
+}
+.actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+}

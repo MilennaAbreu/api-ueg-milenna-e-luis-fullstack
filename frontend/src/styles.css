@@ -1,6 +1,60 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+/* tema Angular Material */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-body {
+html, body {
+  height: 100%;
   margin: 0;
-  font-family: Roboto, sans-serif;
+  background: #121212;
+  color: #e0e0e0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-toolbar {
+  background: #1f1f1f !important;
+  color: #fff !important;
+}
+
+.main-content {
+  min-height: calc(100vh - 128px);
+  padding: 24px;
+}
+
+mat-card {
+  background: #1f1f1f;
+  color: #e0e0e0;
+  margin: 24px auto;
+  border-radius: 8px;
+  max-width: 900px;
+  padding: 16px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.fab-button {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+}
+
+.mat-table {
+  background: #1f1f1f;
+  border-radius: 4px;
+}
+
+.mat-header-cell, .mat-cell {
+  padding: 16px;
+}
+
+button.mat-button {
+  text-transform: none;
 }

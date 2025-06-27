@@ -1,38 +1,77 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { Film } from '../shared/film';
-import { FilmsService } from '../shared/films.service';
+import { Component } from '@angular/core';
+import {Film} from '../shared/film';
+import {MatCard, MatCardTitle} from '@angular/material/card';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow, MatRowDef,
+  MatTable, MatTableDataSource
+} from '@angular/material/table';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {FilmsService} from '../shared/films.service';
+import {MatFabButton, MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
+import {RouterLink} from '@angular/router';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-film-list',
+  imports: [
+    MatCard,
+    MatCardTitle,
+    MatHeaderCell,
+    MatCell,
+    MatTable,
+    MatCheckbox,
+    MatHeaderRow,
+    MatRow,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatHeaderRowDef,
+    MatRowDef,
+    MatIcon,
+    MatFabButton,
+    MatTooltip,
+    RouterLink,
+    FormsModule,
+    MatIconButton
+  ],
   templateUrl: './film-list.component.html',
-  styleUrls: ['./film-list.component.css']
+  styleUrl: './film-list.component.scss'
 })
-export class FilmListComponent implements OnInit {
-  displayedColumns = ['title','director','releaseDate','genre','language','status','check','edit','delete'];
+
+export class FilmListComponent {
   dataSource = new MatTableDataSource<Film>();
 
-  constructor(private filmsService: FilmsService) {}
-
-  ngOnInit(): void {
-    this.loadFilms();
+  constructor(private filmService: FilmsService) {
+    this.updateTable();
   }
 
-  loadFilms(): void {
-    this.filmsService.getFilms().subscribe(films => this.dataSource.data = films);
+  displayedColumns: string[] = ['descricao','genero','idioma','status','check','edit','delete']
+
+
+  toggleWatched(film: Film): void {
+    film.watched = !film.watched;
+    this.filmService.updateFilm(film).subscribe(() => this.updateTable());
   }
 
   getStatusLabel(film: Film): string {
     return film.watched ? 'Assistido' : 'Não assistido';
   }
 
-  toggleWatched(film: Film): void {
-    this.filmsService.updateFilm({...film, watched: !film.watched})
-      .subscribe(() => this.loadFilms());
+  delete(film: Film) {
+    this.filmService.removeFilm(film.id ?? 0).subscribe(() => this.updateTable());
   }
 
-  delete(film: Film): void {
-    this.filmsService.removeFilm(film.id!)
-      .subscribe(() => this.loadFilms());
+  updateTable() {
+    this.filmService.getFilms().subscribe(films => this.dataSource.data = films);
   }
 }
+

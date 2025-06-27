@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>movie-crud</name>
-	<description>API de CRUD de Filmes (Projeto UEG - Milenna e Luis)</description>
+	<description>API de CRUD de Filmes (Projeto de Milenna e Luis)</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
